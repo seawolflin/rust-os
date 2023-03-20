@@ -29,11 +29,11 @@ RUN sh -c "$(curl -fsSL \
   https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # 0.2 config zsh
-COPY .zshrc /root
-RUN \
-  git clone https://github.com/zsh-users/zsh-autosuggestions /root/.oh-my-zsh/custom/plugins/zsh-autosuggestions \
-  && git clone https://github.com/zsh-users/zsh-history-substring-search /root/.oh-my-zsh/custom/plugins/zsh-history-substring-search \
-  && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+# COPY .zshrc /root
+# RUN \
+#   git clone https://github.com/zsh-users/zsh-autosuggestions /root/.oh-my-zsh/custom/plugins/zsh-autosuggestions \
+#   && git clone https://github.com/zsh-users/zsh-history-substring-search /root/.oh-my-zsh/custom/plugins/zsh-history-substring-search \
+#   && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
 
 # 1. Set up QEMU RISC-V
@@ -103,7 +103,7 @@ RUN rustup --version && \
     rustc --version
 
 RUN mkdir -p /root/.cargo && \
-    echo "[source.crates-io]\nregistry = "https://github.com/rust-lang/crates.io-index"\nreplace-with = 'ustc'\n[source.ustc]\nregistry = "git://mirrors.ustc.edu.cn/crates.io-index"" > /root/.cargo/config
+    echo "[source.crates-io]\nregistry = \"https://github.com/rust-lang/crates.io-index\"\nreplace-with = 'ustc'\n[source.ustc]\nregistry = \"git://mirrors.ustc.edu.cn/crates.io-index\"" > /root/.cargo/config
 
 # 3. Build env for labs
 # See os1/Makefile `env:` for example.

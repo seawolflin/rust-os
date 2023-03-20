@@ -5,3 +5,4 @@
 !.cargo/config
 
 **/target/
+os/src/link_app.S

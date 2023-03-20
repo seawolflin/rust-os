@@ -1,22 +1,21 @@
-
 OUT_DIR = target
 TARGET = riscv64gc-unknown-none-elf
-NAME = os
 BIN_NAME = os.bin
 
-build:
-	cargo build
+all: build
 
-build-release:
-	cargo build --release
+clean:
+	cargo clean
 
-strip-all: build-release
-	rust-objcopy --strip-all ${OUT_DIR}/${TARGET}/release/${NAME} -O binary ${OUT_DIR}/${TARGET}/release/${BIN_NAME}
+build-user:
+	@echo "Build user bin"
+	@cd user && make build && cd -
 
-strip-all-debug: build
-	rust-objcopy --strip-all ${OUT_DIR}/${TARGET}/debug/${NAME} -O binary ${OUT_DIR}/${TARGET}/debug/${BIN_NAME}
+build: build-user
+	@echo "Build os"
+	@cd os && make build && cd -
 
-run-gdb: strip-all-debug
+run-gdb: build
 	qemu-system-riscv64 \
     -machine virt \
     -nographic \
@@ -24,7 +23,7 @@ run-gdb: strip-all-debug
     -device loader,file=${OUT_DIR}/${TARGET}/debug/${BIN_NAME},addr=0x80200000 \
     -s -S
 
-run: strip-all
+run: build
 	qemu-system-riscv64 \
     -machine virt \
     -nographic \
@@ -36,3 +35,5 @@ debug-gdb:
     -ex 'file target/riscv64gc-unknown-none-elf/debug/os' \
     -ex 'set arch riscv:rv64' \
     -ex 'target remote localhost:1234'
+
+.PHONY : clean
